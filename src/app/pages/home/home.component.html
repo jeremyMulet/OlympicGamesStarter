@@ -1,3 +1,22 @@
-<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+<div id="title">
+    <p>Medals per Country</p>
+</div>
+
+<div id="content">
+
+    <div class="stat" style="margin-right: 50px;">
+        <p>Number of JOs</p>
+        <p><b>{{(olympics$ | async)?.length }}</b></p>
+    </div>
+
+    <div class="stat">
+        <p>Number of countries</p> 
+        <p><b>{{(olympics$ | async)?.length }}</b></p>
+    </div>
+</div>
+<highcharts-chart 
+  [Highcharts]="Highcharts"
+  [options]="chartOptions"
+
+  style="width: 100%; height: 400px; display: block;"
+></highcharts-chart>
