@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, retry, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Olympic } from '../models/Olympic';
-import { AlertService } from './AlertService.service';
+import { AlertService } from './AlertService.service';  
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +31,9 @@ export class OlympicService {
 
   getOlympics() {
     return this.olympics$.asObservable();
+  }
+
+  getNumberOfOlympics() {
+    this.olympics$.forEach
   }
 }

@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   chartOptions: Highcharts.Options = {
     series: [{
       data: [1, 2, 3],
-      type: 'line'
+      type: 'pie'
     }]
   };
 
