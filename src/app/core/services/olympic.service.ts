@@ -10,30 +10,64 @@ import { AlertService } from './AlertService.service';
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<Olympic>({id:0, country:'', participations:[]});
+  private olympics$ = new BehaviorSubject<Olympic[]>([]);
+
 
   constructor(private http: HttpClient,
               private alertService: AlertService) {}
 
   loadInitialData() {
     console.log('on load initial data');
-    return this.http.get<Olympic>(this.olympicUrl).pipe(
-      tap((value) => this.olympics$.next(value)),
+    return this.http.get<Olympic[]>(this.olympicUrl).pipe(
+      tap((value) => {
+        this.olympics$.next(value);
+      }),
       catchError((error, caught) => {
         // TODO: improve error handling
         console.error(error);
-        this.alertService.showError('Une erreur est survenue lors du chargement des données des Jeux Olympiques.');
-        this.olympics$.next({id:0, country:'', participations:[]});
+        this.olympics$.next([]);
         return caught;
       })
     );
-  }
+  } 
 
   getOlympics() {
     return this.olympics$.asObservable();
   }
 
-  getNumberOfOlympics() {
-    this.olympics$.forEach
+  getNumberOfCountries(): number {
+    return this.olympics$.getValue().length;
   }
+
+  getNumberOfJOs(): number {
+    let total: number[] = [];
+    let olympics = this.olympics$.getValue(); 
+    olympics.forEach( olympic => {
+      olympic.participations.forEach( participation => {
+        if(!total.includes(participation.year)) {
+          total.push(participation.year);
+        }
+      })
+    });
+    return total.length;
+  }
+
+  getPieChartDatas(): any {
+    let series: { data: { name: string; y: number; }[]; type: string; }[] = [];
+    const datas: { name: string; y: number; }[] = [];
+    this.olympics$.getValue().forEach( olympic => {
+      datas.push({name:olympic.country, y:this.getTotalMedalsCountry(olympic)})
+    });
+    series.push({data: datas, type:'pie' });
+    return series;
+  }
+
+  getTotalMedalsCountry(olympicCountry: Olympic): number {
+    let totalMedals = 0;
+    olympicCountry.participations.forEach( participation => {
+      totalMedals += participation.medalsCount;
+    });
+    return totalMedals;
+  }
+
 }
