@@ -1,0 +1,27 @@
+<div id="title">
+    <p>Name of the Country</p>
+</div>
+
+<div id="content">
+
+    <div class="stat" style="margin-right: 50px;">
+        <p>Number of entries</p>
+        <p><b>{{5 }}</b></p>
+    </div>
+
+    <div class="stat">
+        <p>Total number medals</p> 
+        <p><b>{{5}}</b></p>
+    </div>
+
+    <div class="stat">
+        <p>Total number of athletes</p> 
+        <p><b>{{5}}</b></p>
+    </div>
+</div>
+<highcharts-chart 
+  [Highcharts]="Highcharts"
+  [options]="chartOptions"
+
+  style="width: 100%; height: 400px; display: block;"
+></highcharts-chart>
