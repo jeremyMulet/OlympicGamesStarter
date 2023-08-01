@@ -1,22 +1,22 @@
 <div id="title">
-    <p>Name of the Country</p>
+    <p>{{countryDatas?.country}}</p>
 </div>
 
 <div id="content">
 
     <div class="stat" style="margin-right: 50px;">
         <p>Number of entries</p>
-        <p><b>{{5 }}</b></p>
+        <p><b>{{numberOfEntries}}</b></p>
     </div>
 
-    <div class="stat">
+    <div class="stat" style="margin-right: 50px;">
         <p>Total number medals</p> 
-        <p><b>{{5}}</b></p>
+        <p><b>{{numberOfMedals}}</b></p>
     </div>
 
     <div class="stat">
         <p>Total number of athletes</p> 
-        <p><b>{{5}}</b></p>
+        <p><b>{{numberOfAthletes}}</b></p>
     </div>
 </div>
 <highcharts-chart 

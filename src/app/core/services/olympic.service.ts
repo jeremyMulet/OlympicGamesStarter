@@ -35,6 +35,11 @@ export class OlympicService {
     return this.olympics$.asObservable();
   }
 
+  getOlympicsByName(name: string | null): Olympic | null |undefined {
+    const olympic = this.olympics$.getValue().find(olympic => olympic.country === name);
+    return olympic || null;
+  }
+
   getNumberOfCountries(): number {
     return this.olympics$.getValue().length;
   }
@@ -52,16 +57,6 @@ export class OlympicService {
     return total.length;
   }
 
-  getPieChartDatas(): any {
-    let series: { data: { name: string; y: number; }[]; type: string; }[] = [];
-    const datas: { name: string; y: number; }[] = [];
-    this.olympics$.getValue().forEach( olympic => {
-      datas.push({name:olympic.country, y:this.getTotalMedalsCountry(olympic)})
-    });
-    series.push({data: datas, type:'pie' });
-    return series;
-  }
-
   getTotalMedalsCountry(olympicCountry: Olympic): number {
     let totalMedals = 0;
     olympicCountry.participations.forEach( participation => {
@@ -70,4 +65,22 @@ export class OlympicService {
     return totalMedals;
   }
 
+  getTotalAthletesForCountry(olympicCountry: Olympic): number {
+    let totalAthletes = 0;
+    olympicCountry.participations.forEach( participation => {
+      totalAthletes += participation.athleteCount;
+    });
+    return totalAthletes;
+  }
+
+  getPieChartDatas(): any {
+    let series: { data: { name: string; y: number; }[]; type: string; }[] = [];
+    const datas: { name: string; y: number; }[] = [];
+
+    this.olympics$.getValue().forEach( olympic => {
+      datas.push({name:olympic.country, y:this.getTotalMedalsCountry(olympic)})
+    });
+    series.push({data: datas, type:'pie' });
+    return series;
+  }
 }
