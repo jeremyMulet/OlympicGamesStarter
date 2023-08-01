@@ -10,20 +10,29 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+
   public olympics$: Observable<any> = of(null);
+  public numberOfJOs! : number;
+  public numerOfContries!: number;
 
   Highcharts: typeof Highcharts = Highcharts;
-  chartOptions: Highcharts.Options = {
-    series: [{
-      data: [1, 2, 3],
-      type: 'pie'
-    }]
-  };
+  chartOptions!: Highcharts.Options; 
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
-    this.olympics$ = this.olympicService.getOlympics();
-    console.log('on home component');
-  }
+
+    this.olympicService.getOlympics().subscribe(data => {
+
+        this.numberOfJOs = this.olympicService.getNumberOfJOs();
+        this.numerOfContries = this.olympicService.getNumberOfCountries();
+
+        this.chartOptions = {
+          title: { text: '' },
+          series: this.olympicService.getPieChartDatas()
+        };
+        
+      });
+    }
+
 }
