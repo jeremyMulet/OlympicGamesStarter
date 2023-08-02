@@ -23,12 +23,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private olympicService: OlympicService, private router: Router) {
   }
 
-  ngOnDestroy(): void {
-    if (this.olympics$) {
-      this.olympics$.unsubscribe();
-    }
-  }
-
   ngOnInit(): void {
 
     this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
@@ -36,6 +30,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.numberOfCountries = this.olympicService.getNumberOfCountries();
       this.initPieChart(data);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.olympics$) {
+      this.olympics$.unsubscribe();
+    }
   }
 
   initPieChart(olympics: Olympic[]): void {
@@ -48,11 +48,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     series.push({data: datas, type:'pie' });
 
     this.chartOptions = {
+      colors: ['#956065', '#793d52', '#8aa1db', '#9780a1', '#bee0f1', '#b9cbe7'],
       title: {text: ''},
       tooltip: {
+        backgroundColor: 'rgb(2, 131, 143)',
+        borderWidth: 0,
+        borderRadius: 10,
+        shadow: false,
+        style: {
+          color: '#F0F0F0',
+          textAlign: 'center'
+        },
         useHTML: true,
         formatter: function () {
-          return this.point.name + '<i class="material-icons">&#xE5A7;</i><br/> Medals: <b>' + this.y + '</b>';
+          return this.point.name + '<br/><i class="fas fa-medal"></i><b> '+this.y + '</b>';
         }
       }, plotOptions: {
         pie: {
