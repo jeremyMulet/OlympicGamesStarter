@@ -13,9 +13,7 @@ import {Subscription} from "rxjs";
 export class DetailComponent implements OnInit, OnDestroy {
 
   olympics$?: Subscription;
-  numberOfEntries!: number;
-  numberOfMedals!: number;
-  numberOfAthletes!: number;
+  pageInfos: {name: string, data: number}[] = [];
   countryDatas?: Olympic | null |undefined ;
 
   Highcharts: typeof Highcharts = Highcharts;
@@ -30,7 +28,6 @@ export class DetailComponent implements OnInit, OnDestroy {
     const olympicCountryName = this.route.snapshot.paramMap.get('country');
 
     this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
-
       if (this.olympicService.getOlympicsByName(olympicCountryName) !== null) {
         this.countryDatas = this.olympicService.getOlympicsByName(olympicCountryName);
       } else {
@@ -38,9 +35,9 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
 
       if (this.countryDatas !== undefined && this.countryDatas !== null) {
-        this.numberOfEntries = this.countryDatas?.participations.length;
-        this.numberOfMedals = this.olympicService.getTotalMedalsCountry(this.countryDatas);
-        this.numberOfAthletes = this.olympicService.getTotalAthletesForCountry(this.countryDatas);
+        this.pageInfos.push({name:"Number of entries", data:this.countryDatas?.participations.length})
+        this.pageInfos.push({name:"Number of medals", data:this.olympicService.getTotalMedalsCountry(this.countryDatas)})
+        this.pageInfos.push({name:"Number of athletes", data:this.olympicService.getTotalAthletesForCountry(this.countryDatas)})
         this.initLineChart();
       }
     });

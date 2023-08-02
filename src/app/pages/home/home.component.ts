@@ -14,8 +14,8 @@ import {SeriesOptionsType} from "highcharts";
 export class HomeComponent implements OnInit, OnDestroy {
 
   olympics$?: Subscription;
-  numberOfJOs!: number;
-  numberOfCountries!: number;
+  pageInfos: {name: string, data: number}[] = [];
+  pageTitle: string = "Medals per Country";
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions!: Highcharts.Options;
@@ -24,10 +24,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
-      this.numberOfJOs = this.olympicService.getNumberOfJOs();
-      this.numberOfCountries = this.olympicService.getNumberOfCountries();
+      if (data.length != 0) {
+        this.pageInfos.push({name: "Number of JOs", data: this.olympicService.getNumberOfJOs()})
+        this.pageInfos.push({name: "Number of countries", data: this.olympicService.getNumberOfCountries()})
+      }
       this.initPieChart(data);
     });
   }

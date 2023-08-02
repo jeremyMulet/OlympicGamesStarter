@@ -1,19 +1,8 @@
-<div id="title">
-    <p>Medals per Country</p>
-</div>
+<app-header
+  [pageTitle]="pageTitle"
+  [pageInfos]="pageInfos"
+></app-header>
 
-<div id="content">
-
-    <div class="stat" style="margin-right: 50px;">
-        <p>Number of JOs</p>
-        <p><b>{{numberOfJOs}}</b></p>
-    </div>
-
-    <div class="stat">
-        <p>Number of countries</p>
-        <p><b>{{numberOfCountries}}</b></p>
-    </div>
-</div>
 <highcharts-chart
   [Highcharts]="Highcharts"
   [options]="chartOptions"
