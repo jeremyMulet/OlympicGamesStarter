@@ -13,6 +13,10 @@ const routes: Routes = [
     path: 'detail/:country', // wildcard
     component: DetailComponent,
   },
+  {
+    path: '**', // wildcard
+    component: NotFoundComponent,
+  }
 ];
 
 @NgModule({

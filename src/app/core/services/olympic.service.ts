@@ -35,7 +35,7 @@ export class OlympicService {
     return this.olympics$.asObservable();
   }
 
-  getOlympicsByName(name: string | null): Olympic | null |undefined {
+  getOlympicsByName(name: string | null): Olympic | null {
     const olympic = this.olympics$.getValue().find(olympic => olympic.country === name);
     return olympic || null;
   }

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import {Subscription} from "rxjs";
@@ -21,7 +21,9 @@ export class DetailComponent implements OnInit, OnDestroy {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions!: Highcharts.Options;
 
-  constructor(private olympicService: OlympicService, private route: ActivatedRoute) { }
+  constructor(private olympicService: OlympicService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
 
@@ -29,8 +31,10 @@ export class DetailComponent implements OnInit, OnDestroy {
 
     this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
 
-      if (this.olympicService.getOlympicsByName(olympicCountryName) !== undefined) {
+      if (this.olympicService.getOlympicsByName(olympicCountryName) !== null) {
         this.countryDatas = this.olympicService.getOlympicsByName(olympicCountryName);
+      } else {
+        this.router.navigateByUrl('**')
       }
 
       if (this.countryDatas !== undefined && this.countryDatas !== null) {
