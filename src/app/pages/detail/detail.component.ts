@@ -18,7 +18,7 @@ export class DetailComponent implements OnInit {
   
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions!: Highcharts.Options;
-
+  
   constructor(private olympicService: OlympicService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -42,7 +42,6 @@ export class DetailComponent implements OnInit {
 
   getLineChartDatas(): void {
     
-    let series: { data: number[]; type: string; }[] = [];
     const datas: number[] = [];
     const categories: string[] = [];
 
@@ -50,7 +49,6 @@ export class DetailComponent implements OnInit {
       datas.push(participation.medalsCount);
       categories.push(participation.year.toString());
     })
-    series.push({data: datas, type:'line' });
     this.chartOptions = {
       title: {
         text: '',
