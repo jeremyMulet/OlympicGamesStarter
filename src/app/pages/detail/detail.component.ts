@@ -1,43 +1,46 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Olympic } from 'src/app/core/models/Olympic';
-import { OlympicService } from 'src/app/core/services/olympic.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Olympic} from 'src/app/core/models/Olympic';
+import {OlympicService} from 'src/app/core/services/olympic.service';
 import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-detail',
-  templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss']
+  selector: 'app-detail', templateUrl: './detail.component.html', styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit, OnDestroy {
 
   olympics$?: Subscription;
-  pageInfos: {name: string, data: number}[] = [];
-  countryDatas?: Olympic | null |undefined ;
+  pageInfos: { name: string, data: number }[] = [];
+  countryDatas?: Olympic | null | undefined;
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions!: Highcharts.Options;
 
-  constructor(private olympicService: OlympicService,
-              private router: Router,
-              private route: ActivatedRoute) { }
+  constructor(private olympicService: OlympicService, private router: Router, private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
 
     const olympicCountryName = this.route.snapshot.paramMap.get('country');
 
     this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
-      if (this.olympicService.getOlympicsByName(olympicCountryName) !== null) {
-        this.countryDatas = this.olympicService.getOlympicsByName(olympicCountryName);
+      if (this.olympicService.getOlympicByCountryName(olympicCountryName) !== null) {
+        this.countryDatas = this.olympicService.getOlympicByCountryName(olympicCountryName);
       } else {
         this.router.navigateByUrl('**')
       }
 
       if (this.countryDatas !== undefined && this.countryDatas !== null) {
-        this.pageInfos.push({name:"Number of entries", data:this.countryDatas?.participations.length})
-        this.pageInfos.push({name:"Number of medals", data:this.olympicService.getTotalMedalsCountry(this.countryDatas)})
-        this.pageInfos.push({name:"Number of athletes", data:this.olympicService.getTotalAthletesForCountry(this.countryDatas)})
+        this.pageInfos.push({name: "Number of entries", data: this.countryDatas?.participations.length})
+        this.pageInfos.push({
+          name: "Number of medals",
+          data: this.olympicService.getTotalMedalsForACountry(this.countryDatas)
+        })
+        this.pageInfos.push({
+          name: "Number of athletes",
+          data: this.olympicService.getTotalAthletesForACountry(this.countryDatas)
+        })
         this.initLineChart();
       }
     });
@@ -60,30 +63,22 @@ export class DetailComponent implements OnInit, OnDestroy {
     })
     this.chartOptions = {
       colors: ['#956065'],
-      title: { text: '' },
+      title: {text: ''},
       xAxis: {
-        title:{ text: 'Dates'},
+        title: {text: 'Dates'},
         categories: categories
       },
       tooltip: {
-        backgroundColor: 'rgb(2, 131, 143)',
-        borderWidth: 0,
-        borderRadius: 10,
-        shadow: false,
+        backgroundColor: 'rgb(2, 131, 143)', borderWidth: 0, borderRadius: 10, shadow: false,
         style: {
-          color: '#F0F0F0',
-          textAlign: 'center'
+          color: '#F0F0F0', textAlign: 'center'
         },
-        useHTML: true,
-        formatter: function () {
+        useHTML: true, formatter: function () {
           return '<i class="fas fa-medal"></i><b> ' + this.y + '</b>';
         }
       },
-      legend: { enabled: false },
-      series: [{
-        type: 'line',
-        data: datas
-      }],
+      legend: {enabled: false},
+      series: [{ type: 'line', data: datas }],
     };
 
   }
