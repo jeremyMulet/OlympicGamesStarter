@@ -3,7 +3,7 @@
  *
  *  @author Jérémy Mulet
  */
-import { Participation } from "./Participation";
+import {Participation} from "./Participation";
 
 export interface Olympic {
     id: number;

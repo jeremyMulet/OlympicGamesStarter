@@ -1,22 +1,24 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription, take} from 'rxjs';
-import { OlympicService } from './core/services/olympic.service';
+import {OlympicService} from './core/services/olympic.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  olympics$?: Subscription;
-  constructor(private olympicService: OlympicService) {}
+    olympics$?: Subscription;
 
-  ngOnInit(): void {
-    this.olympics$ = this.olympicService.loadInitialData().pipe(take(1)).subscribe();
-  }
+    constructor(private olympicService: OlympicService) {
+    }
 
-  ngOnDestroy(): void {
-    this.olympics$?.unsubscribe()
-  }
+    ngOnInit(): void {
+        this.olympics$ = this.olympicService.loadInitialData().pipe(take(1)).subscribe();
+    }
+
+    ngOnDestroy(): void {
+        this.olympics$?.unsubscribe()
+    }
 }
