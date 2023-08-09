@@ -13,7 +13,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     olympics$?: Subscription;
     pageInfos: { name: string, data: number }[] = [];
     countryData?: Olympic | null | undefined;
-    Highcharts: typeof Highcharts = Highcharts;
+    highcharts: typeof Highcharts = Highcharts;
     chartOptions!: Highcharts.Options;
 
     constructor(private olympicService: OlympicService,
@@ -66,8 +66,14 @@ export class DetailComponent implements OnInit, OnDestroy {
             colors: ['#956065'],
             title: {text: ''},
             xAxis: {
-                title: {text: 'Dates'},
-                categories: categories
+                title: {
+                    text: 'Dates',
+                    style: { fontSize: '25px' }
+                },
+                categories: categories,
+            },
+            yAxis: {
+                title: {text: null}
             },
             tooltip: {
                 backgroundColor: 'rgb(2, 131, 143)', borderWidth: 0, borderRadius: 10, shadow: false,

@@ -19,6 +19,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.olympics$?.unsubscribe()
+        if (this.olympics$) {
+            this.olympics$?.unsubscribe();
+        }
     }
 }

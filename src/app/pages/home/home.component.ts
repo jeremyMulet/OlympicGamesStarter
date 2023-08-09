@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     olympics$?: Subscription;
     pageInfos: { name: string, data: number }[] = [];
     pageTitle: string = "Medals per Country";
-    Highcharts: typeof Highcharts = Highcharts;
+    highcharts: typeof Highcharts = Highcharts;
     chartOptions!: Highcharts.Options;
 
     constructor(private olympicService: OlympicService, private router: Router) {}

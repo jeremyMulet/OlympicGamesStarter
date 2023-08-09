@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {Olympic} from '../models/Olympic';
-import {AlertService} from './AlertService.service';
+import {ErrorService} from "./ErrorService.service";
 
 @Injectable({
     providedIn: 'root',
@@ -12,13 +12,14 @@ export class OlympicService {
     private olympicUrl: string = './assets/mock/olympic.json';
     private olympics$ = new BehaviorSubject<Olympic[]>([]);
 
-    constructor(private http: HttpClient, private alertService: AlertService) {}
+    constructor(private http: HttpClient, private errorService: ErrorService) {}
 
     loadInitialData(): Observable<Olympic[]> {
         return this.http.get<Olympic[]>(this.olympicUrl).pipe(tap((value) => {
             this.olympics$.next(value);
         }), catchError((error, caught) => {
-            // TODO: improve error handling
+            // // TODO: improve error handling
+            // this.errorService.showError("Something went wrong...");
             console.error(error);
             this.olympics$.next([]);
             return caught;
