@@ -1,0 +1,16 @@
+<header>
+    <h1>Olympics Games App</h1>
+    <nav>
+        <a routerLink="">Home</a>
+    </nav>
+</header>
+<div id="title">
+    <p>{{pageTitle}}</p>
+</div>
+
+<div id="content">
+    <div *ngFor="let info of pageInfos" class="stat" style="margin-right: 50px;">
+        <p>{{info.name}}</p>
+        <p><b>{{info.data}}</b></p>
+    </div>
+</div>
