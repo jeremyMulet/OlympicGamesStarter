@@ -15,4 +15,8 @@ export class NotFoundComponent implements OnInit {
         this.errorService.setNotFoundErrorMessage("");
     }
 
+    onClickBackBtn() {
+        history.go(-2);
+    }
+
 }
