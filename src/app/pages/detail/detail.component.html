@@ -4,7 +4,7 @@
         [pageInfos]="pageInfos"
     ></app-header>
 
-    <highcharts-chart
+    <highcharts-chart *ngIf="pageInfos.length > 0"
         [Highcharts]="highcharts"
         [options]="chartOptions"
     ></highcharts-chart>

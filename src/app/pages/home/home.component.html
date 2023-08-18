@@ -4,7 +4,7 @@
         [pageInfos]="pageInfos"
     ></app-header>
 
-    <highcharts-chart
+    <highcharts-chart *ngIf="olympics$"
         [Highcharts]="highcharts"
         [options]="chartOptions"
     ></highcharts-chart>
