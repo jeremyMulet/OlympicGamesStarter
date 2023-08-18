@@ -11,8 +11,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     olympics$?: Subscription;
 
-    constructor(private olympicService: OlympicService) {
-    }
+    constructor(private olympicService: OlympicService) {}
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.loadInitialData().pipe(take(1)).subscribe();
