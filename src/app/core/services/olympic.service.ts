@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {Olympic} from '../models/Olympic';
+import {LocalStorageService} from "./local-storage.service";
 
 /**
  * OlympicService
@@ -21,14 +22,17 @@ export class OlympicService {
     private olympicUrl: string = './assets/mock/olympic.json';
     private olympics$ = new BehaviorSubject<Olympic[]>([]);
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private localStorage: LocalStorageService) {
+        this.setOlympicsWithLocalStorage();
+    }
 
     loadInitialData(): Observable<Olympic[]> {
         return this.http.get<Olympic[]>(this.olympicUrl).pipe(tap((value) => {
             this.olympics$.next(value);
+            this.localStorage.setItem("olympics",value);
         }), catchError((error, caught) => {
             console.error(error);
-            this.olympics$.next([]);
+            this.setOlympicsWithLocalStorage();
             return caught;
         }));
     }
@@ -37,9 +41,8 @@ export class OlympicService {
         return this.olympics$.asObservable();
     }
 
-    getOlympicByCountryName(name: string | null): Olympic | null {
-        const olympic = this.olympics$.getValue().find(olympic => olympic.country === name);
-        return olympic || null;
+    getOlympicByCountryName(name: string | null): Olympic | undefined {
+        return this.olympics$.getValue().find(olympic => olympic.country === name);
     }
 
     getNumberOfCountries(): number {
@@ -62,6 +65,14 @@ export class OlympicService {
         });
 
         return total.length;
+    }
+
+    setOlympicsWithLocalStorage(): void {
+        if (this.localStorage.getItem<Olympic[]>("olympics") !== null) {
+            this.olympics$.next(this.localStorage.getItem("olympics")!);
+        } else {
+            this.olympics$.next([]);
+        }
     }
 
     getTotalMedalsForACountry(olympicCountry: Olympic): number {
