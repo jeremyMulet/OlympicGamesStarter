@@ -6,6 +6,23 @@ import {SeriesOptionsType} from 'highcharts';
 import {OlympicService} from 'src/app/core/services/olympic.service';
 import {Olympic} from "../../core/models/Olympic";
 
+/**
+ * Home Component
+ *
+ * Description:
+ * The Home component is the entry point of the application, serving as the default landing page.
+ * It introduces the user to the context of the application and provides a visual representation
+ * of the Olympic medals count per country, aggregated over all years.
+ *
+ * Features:
+ * - Automatically fetches and displays a graphical representation of the total medals count for each country.
+ * - Allows users to interact with the chart: Clicking on a country within the chart will
+ *   navigate the user to a detailed page specific to that country, offering more in-depth
+ *   information and statistics.
+ *
+ * @author Jérémy Mulet
+ */
+
 @Component({
     selector: 'app-home', templateUrl: './home.component.html', styleUrls: ['./home.component.scss'],
 })

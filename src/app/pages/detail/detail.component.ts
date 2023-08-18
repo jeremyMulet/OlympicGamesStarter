@@ -6,6 +6,26 @@ import {OlympicService} from 'src/app/core/services/olympic.service';
 import {ErrorService} from "../../core/services/ErrorService.service";
 import {LocalStorageService} from "../../core/services/local-storage.service";
 
+/**
+ * Detail Component
+ *
+ * Description:
+ * The Detail component provides in-depth insights and statistics about a selected country's
+ * participation in the Olympic Games.
+ *
+ * Features:
+ * - Automatically fetches and displays detailed statistics specific to the country selected
+ *   by the user from the Home component.
+ * - Presents the following country-specific data:
+ *   - Total number of Olympic Games participations.
+ *   - Aggregate count of medals won across all Olympic Games.
+ *   - Total number of athletes the country has presented in the Olympic Games.
+ * - Incorporates a graphical representation to visualize
+ *   the distribution of medals won by the country across different Olympic Games editions.
+ *
+ * @author Jérémy Mulet
+ */
+
 @Component({
     selector: 'app-detail', templateUrl: './detail.component.html', styleUrls: ['./detail.component.scss']
 })
