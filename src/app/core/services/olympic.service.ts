@@ -8,7 +8,7 @@ import {LocalStorageService} from "./local-storage.service";
 /**
  * OlympicService
  *
- * @description This service encapsulates methods and behaviors associated with Olympic data.
+ * @Description This service encapsulates methods and behaviors associated with Olympic data.
  * It maintains a BehaviorSubject to store and emit the current state of Olympic data for other
  * components/services to consume.
  *
