@@ -28,7 +28,7 @@ import {Olympic} from "../../core/models/Olympic";
 })
 export class HomeComponent implements OnInit, OnDestroy {
     olympics$?: Subscription;
-    pageInfos: { name: string, data: number }[] = [];
+    pageInfos: { label: string, value: number }[] = [];
     pageTitle: string = "Medals per Country";
     highcharts: typeof Highcharts = Highcharts;
     chartOptions!: Highcharts.Options;
@@ -38,8 +38,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
             if (data.length != 0) {
-                this.pageInfos.push({name: "Number of JOs", data: this.olympicService.getNumberOfJOs()})
-                this.pageInfos.push({name: "Number of countries", data: this.olympicService.getNumberOfCountries()})
+                this.pageInfos.push({label: "Number of JOs", value: this.olympicService.getNumberOfJOs()})
+                this.pageInfos.push({label: "Number of countries", value: this.olympicService.getNumberOfCountries()})
             }
             this.initPieChart(data);
         });

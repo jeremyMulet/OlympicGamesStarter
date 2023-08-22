@@ -31,7 +31,7 @@ import {LocalStorageService} from "../../core/services/local-storage.service";
 })
 export class DetailComponent implements OnInit {
 
-    pageInfos: { name: string, data: number }[] = [];
+    pageInfos: { label: string, value: number }[] = [];
     countryData?: Olympic | null | undefined;
     highcharts: typeof Highcharts = Highcharts;
     chartOptions!: Highcharts.Options;
@@ -90,14 +90,14 @@ export class DetailComponent implements OnInit {
 
     initHeader(): void {
         this.pageInfos.length = 0;
-        this.pageInfos.push({name: "Number of entries", data: this.countryData!.participations.length});
+        this.pageInfos.push({label: "Number of entries", value: this.countryData!.participations.length});
         this.pageInfos.push({
-            name: "Number of medals",
-            data: this.olympicService.getTotalMedalsForACountry(this.countryData!)
+            label: "Number of medals",
+            value: this.olympicService.getTotalMedalsForACountry(this.countryData!)
         });
         this.pageInfos.push({
-            name: "Number of athletes",
-            data: this.olympicService.getTotalAthletesForACountry(this.countryData!)
+            label: "Number of athletes",
+            value: this.olympicService.getTotalAthletesForACountry(this.countryData!)
         });
     }
 
