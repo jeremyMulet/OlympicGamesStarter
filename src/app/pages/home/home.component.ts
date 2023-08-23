@@ -38,8 +38,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
             if (data.length != 0) {
-                this.pageInfos.push({label: "Number of JOs", value: this.olympicService.getNumberOfJOs()})
-                this.pageInfos.push({label: "Number of countries", value: this.olympicService.getNumberOfCountries()})
+                this.pageInfos.push({label: "Number of JOs", value: this.getNumberOfJOs(data)})
+                this.pageInfos.push({label: "Number of countries", value: data.length})
             }
             this.initPieChart(data);
         });
@@ -86,6 +86,15 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }
             }, series: series
         };
+    }
+
+    getNumberOfJOs(olympics: Olympic[]): number {
+        const uniqueYears = new Set(
+            olympics.flatMap(olympic =>
+                olympic.participations.map(participation => participation.year)
+            )
+        );
+        return uniqueYears.size;
     }
 
     onClickPie(country: string): void {

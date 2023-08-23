@@ -1,10 +1,10 @@
-<div>
+<div *ngIf="pageInfos.length > 0">
     <app-header
-        [pageTitle]="countryData?.country"
+        [pageTitle]="countryData.country"
         [pageInfos]="pageInfos"
     ></app-header>
 
-    <highcharts-chart *ngIf="pageInfos.length > 0"
+    <highcharts-chart
         [Highcharts]="highcharts"
         [options]="chartOptions"
     ></highcharts-chart>

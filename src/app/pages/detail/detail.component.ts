@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Olympic} from 'src/app/core/models/Olympic';
 import {OlympicService} from 'src/app/core/services/olympic.service';
 import {ErrorService} from "../../core/services/ErrorService.service";
-import {LocalStorageService} from "../../core/services/local-storage.service";
+import {filter, find, map, Observable, take} from "rxjs";
 
 /**
  * Detail Component
@@ -32,7 +32,7 @@ import {LocalStorageService} from "../../core/services/local-storage.service";
 export class DetailComponent implements OnInit {
 
     pageInfos: { label: string, value: number }[] = [];
-    countryData?: Olympic | null | undefined;
+    countryData!: Olympic;
     highcharts: typeof Highcharts = Highcharts;
     chartOptions!: Highcharts.Options;
     isChartDisplayable = false;
@@ -41,28 +41,33 @@ export class DetailComponent implements OnInit {
     constructor(private olympicService: OlympicService,
                 private router: Router,
                 private route: ActivatedRoute,
-                private errorService: ErrorService,
-                private localStorageService: LocalStorageService) {}
+                private errorService: ErrorService) {}
 
     ngOnInit(): void {
-        this.countryData = this.olympicService.getOlympicByCountryName(this.requestedCountry);
-        if (this.countryData !== undefined) {
-            this.localStorageService.setItem("currentCountryData", this.countryData);
-            this.initHeader();
-            this.initLineChart();
-        } else {
-            this.checkForExistingStorageData();
-        }
+       this.olympicService.getOlympicById(this.requestedCountry).pipe(take(1)).subscribe(
+            {
+                next: value => {
+                    if (value) {
+                        this.countryData = value;
+                        this.initHeader();
+                        this.initLineChart();
+                    } else {
+                        this.errorService.setNotFoundErrorMessage("We cannot found information for the chosen country");
+                        this.router.navigateByUrl('**');
+                    }
+                }
+            }
+        )
+
     }
 
     initLineChart(): void {
         this.isChartDisplayable = true;
-        console.log("init line chart")
-        const datas: number[] = [];
+        const data: number[] = [];
         const categories: string[] = [];
 
-        this.countryData?.participations.forEach(participation => {
-            datas.push(participation.medalsCount);
+        this.countryData.participations.forEach(participation => {
+            data.push(participation.medalsCount);
             categories.push(participation.year.toString());
         })
 
@@ -84,7 +89,7 @@ export class DetailComponent implements OnInit {
                 }
             },
             legend: {enabled: false},
-            series: [{type: 'line', data: datas}],
+            series: [{type: 'line', data: data}],
         };
     }
 
@@ -97,20 +102,13 @@ export class DetailComponent implements OnInit {
         });
         this.pageInfos.push({
             label: "Number of athletes",
-            value: this.olympicService.getTotalAthletesForACountry(this.countryData!)
+            value: this.getTotalAthletesForACountry(this.countryData!)
         });
     }
 
-    checkForExistingStorageData(): void {
-        this.countryData = this.localStorageService.getItem("currentCountryData");
-        if (this.countryData != null && this.countryData.country == this.requestedCountry) {
-            this.initHeader();
-            this.initLineChart();
-        } else  {
-            this.errorService.setNotFoundErrorMessage("We cannot found information for the chosen country");
-            this.router.navigateByUrl('**');
-        }
-
+    getTotalAthletesForACountry(olympicCountry: Olympic): number {
+        return olympicCountry.participations.reduce((total, participation) =>
+            total + participation.athleteCount, 0);
     }
 
 }

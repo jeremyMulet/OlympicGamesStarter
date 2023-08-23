@@ -1,5 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ErrorService} from "../../core/services/ErrorService.service";
+import {NavigationStart, Router} from "@angular/router";
+import { Location } from '@angular/common';
+import {Subscription} from "rxjs";
 
 /**
  * NotFound Component
@@ -23,17 +26,31 @@ import {ErrorService} from "../../core/services/ErrorService.service";
     templateUrl: './not-found.component.html',
     styleUrls: ['./not-found.component.scss']
 })
-export class NotFoundComponent implements OnInit {
+export class NotFoundComponent implements OnInit, OnDestroy {
+
+    private routerSubscription!: Subscription;
     errorMessage: string  =  "";
-    constructor(private errorService: ErrorService) { }
+    constructor(private errorService: ErrorService, private router: Router, private location: Location) { }
 
     ngOnInit(): void {
         this.errorMessage = this.errorService.getNotFoundErrorMessage();
         this.errorService.setNotFoundErrorMessage("");
+
+       this.routerSubscription = this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                if (event.navigationTrigger === 'popstate') {
+                    history.go(-2);
+                }
+            }
+        });
     }
 
     onClickBackBtn() {
         history.go(-2);
+    }
+
+    ngOnDestroy(): void {
+        this.routerSubscription.unsubscribe();
     }
 
 }
