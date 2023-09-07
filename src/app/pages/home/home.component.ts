@@ -6,12 +6,29 @@ import {SeriesOptionsType} from 'highcharts';
 import {OlympicService} from 'src/app/core/services/olympic.service';
 import {Olympic} from "../../core/models/Olympic";
 
+/**
+ * Home Component
+ *
+ * @Description:
+ * The Home component is the entry point of the application, serving as the default landing page.
+ * It introduces the user to the context of the application and provides a visual representation
+ * of the Olympic medals count per country, aggregated over all years.
+ *
+ * @Features:
+ * - Automatically fetches and displays a graphical representation of the total medals count for each country.
+ * - Allows users to interact with the chart: Clicking on a country within the chart will
+ *   navigate the user to a detailed page specific to that country, offering more in-depth
+ *   information and statistics.
+ *
+ * @author Jérémy Mulet
+ */
+
 @Component({
     selector: 'app-home', templateUrl: './home.component.html', styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
     olympics$?: Subscription;
-    pageInfos: { name: string, data: number }[] = [];
+    pageInfos: { label: string, value: number }[] = [];
     pageTitle: string = "Medals per Country";
     highcharts: typeof Highcharts = Highcharts;
     chartOptions!: Highcharts.Options;
@@ -21,8 +38,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics().subscribe(data => {
             if (data.length != 0) {
-                this.pageInfos.push({name: "Number of JOs", data: this.olympicService.getNumberOfJOs()})
-                this.pageInfos.push({name: "Number of countries", data: this.olympicService.getNumberOfCountries()})
+                this.pageInfos.push({label: "Number of JOs", value: this.getNumberOfJOs(data)})
+                this.pageInfos.push({label: "Number of countries", value: data.length})
             }
             this.initPieChart(data);
         });
@@ -69,6 +86,15 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }
             }, series: series
         };
+    }
+
+    getNumberOfJOs(olympics: Olympic[]): number {
+        const uniqueYears = new Set(
+            olympics.flatMap(olympic =>
+                olympic.participations.map(participation => participation.year)
+            )
+        );
+        return uniqueYears.size;
     }
 
     onClickPie(country: string): void {
